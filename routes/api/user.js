@@ -1,16 +1,24 @@
 const express = require("express");
 
-const { user: ctrl } = require("../../controllers");
-const { subscriptionJoinSchema } = require("../../models/userModel");
-const { validation, ctrlWrapper, auth } = require("../../middlewares");
-const router = express.Router();
 
-router.get("/current", auth, ctrlWrapper(ctrl.getCurrent));
+const {getCurrent, updateSubscription, updateAvatar}  = require("../../controllers/user")
+const { subscriptionJoinSchema } = require("../../models/userModel");
+const { validation, ctrlWrapper,  auth} = require("../../middlewares/index");
+const router = new express.Router();
+const upload = require('../../middlewares/upload')
+router.get("/current", auth, ctrlWrapper(getCurrent));
 router.patch(
   "/subscription",
   auth,
   validation(subscriptionJoinSchema),
-  ctrlWrapper(ctrl.updateSubscription)
+  ctrlWrapper(updateSubscription)
+);
+
+router.patch(
+  '/avatars',
+  auth,
+  upload.single('avatar'),
+  ctrlWrapper(updateAvatar),
 );
 
 module.exports = router;
