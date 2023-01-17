@@ -3,6 +3,10 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const { SECRET_KEY } = process.env;
 require("dotenv").config();
+const sgMail = require('@sendgrid/mail');
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+
+
 
     const signup = async (req, res) => {
         const { email, password } = req.body;
@@ -33,7 +37,7 @@ require("dotenv").config();
 const login = async (req, res) => {
         require("dotenv").config();
         const { email, password } = req.body;
-        const user = await User.findOne({ email });
+        const user = await User.findOne({ email, verify: true });
 
         if (!user || !user.comparePassword(password)) {
             res.status(401).json({

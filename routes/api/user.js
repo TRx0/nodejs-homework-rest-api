@@ -1,8 +1,8 @@
 const express = require("express");
 
 
-const {getCurrent, updateSubscription, updateAvatar}  = require("../../controllers/user")
-const { subscriptionJoinSchema } = require("../../models/userModel");
+const {getCurrent, updateSubscription, updateAvatar, recheckVerifyEmail, verifyEmail}  = require("../../controllers/user")
+const { subscriptionJoinSchema, emailJoiSchema } = require("../../models/userModel");
 const { validation, ctrlWrapper,  auth} = require("../../middlewares/index");
 const router = new express.Router();
 const upload = require('../../middlewares/upload')
@@ -20,5 +20,12 @@ router.patch(
   upload.single('avatar'),
   ctrlWrapper(updateAvatar),
 );
+router.post(
+    "/verify",
+    validation(emailJoiSchema),
+    ctrlWrapper(recheckVerifyEmail)
+  );
+  
+  router.get("/verify/:verificationToken", ctrlWrapper(verifyEmail));
 
 module.exports = router;

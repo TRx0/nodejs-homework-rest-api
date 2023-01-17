@@ -7,6 +7,7 @@ const router = new express.Router();
 require("dotenv").config();
 
 router.post('/signup', validation(userJoiSchema), ctrlWrapper(ctrl.signup));
+router.post('/verify/:verificationToken', validation(userJoiSchema), ctrlWrapper(ctrl.signup));
 router.post('/login', validation(userJoiSchema), ctrlWrapper(ctrl.login));
 router.get('/logout', auth, ctrlWrapper(ctrl.logout));
 
